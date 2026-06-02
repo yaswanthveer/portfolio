@@ -615,7 +615,8 @@ export const Desktop: React.FC = () => {
             key={ico.id}
             drag={!isMobile}
             dragMomentum={false}
-            initial={isMobile ? { x: 12 + (idx % 3) * 100, y: 80 + Math.floor(idx / 3) * 90 } : { x: 24, y: 120 + idx * 80 }}
+            initial={false}
+            animate={isMobile ? { x: 12 + (idx % 3) * 98, y: 80 + Math.floor(idx / 3) * 90 } : { x: 24, y: 120 + idx * 80 }}
             className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 group"
             onDoubleClick={() => openWindow(ico.id)}
             onClick={() => {
@@ -646,7 +647,8 @@ export const Desktop: React.FC = () => {
           <motion.div
             drag={!isMobile}
             dragMomentum={false}
-            initial={isMobile ? { x: 12 + (desktopIcons.length % 3) * 100, y: 80 + Math.floor(desktopIcons.length / 3) * 90 } : { x: 24, y: 120 + desktopIcons.length * 80 }}
+            initial={false}
+            animate={isMobile ? { x: 12 + (desktopIcons.length % 3) * 98, y: 80 + Math.floor(desktopIcons.length / 3) * 90 } : { x: 24, y: 120 + desktopIcons.length * 80 }}
             className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 animate-pulse"
             onDoubleClick={() => openWindow("secret")}
             onClick={() => {

@@ -161,7 +161,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         </div>
 
         {/* Wifi Connected Node */}
-        <div className="flex items-center space-x-1 text-[#00FF88]" title="Wi-Fi Signal: Strong Encryption socket connected">
+        <div className="flex items-center space-x-1 text-[#00FF88] hidden md:flex" title="Wi-Fi Signal: Strong Encryption socket connected">
           <Wifi className="w-3.5 h-3.5" />
           <span className="text-[10px] hidden lg:inline">ONLINE</span>
         </div>
@@ -169,14 +169,14 @@ export const Taskbar: React.FC<TaskbarProps> = ({
         {/* Sound toggle */}
         <button
           onClick={handleToggleSound}
-          className="p-1.5 taskbar-btn rounded transition"
+          className="p-1.5 taskbar-btn rounded transition shrink-0"
           title={soundMuted ? "Unmute click sounds" : "Mute click sounds"}
         >
           {soundMuted ? <VolumeX className="w-3.5 h-3.5 text-[var(--text-secondary)]" /> : <Volume2 className="w-3.5 h-3.5 text-[#00D4FF]" />}
         </button>
 
         {/* Digital Time clock */}
-        <div className="flex items-center space-x-1.5 text-[var(--text-primary)] font-bold" title="User Machine Time">
+        <div className="flex items-center space-x-1.5 text-[var(--text-primary)] font-bold hidden sm:flex shrink-0" title="User Machine Time">
           <Clock className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
           <span>{timeStr}</span>
         </div>
