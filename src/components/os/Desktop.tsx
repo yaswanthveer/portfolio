@@ -58,6 +58,7 @@ export const Desktop: React.FC = () => {
   // Theme state
   const [theme, setTheme] = useState<"dark" | "light" | "gold">("dark");
   const [isRebooting, setIsRebooting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Time greeting state
   const [greeting, setGreeting] = useState("");
@@ -102,7 +103,7 @@ export const Desktop: React.FC = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Time-based Greetings and Day/Night Theme Auto-sense
+  // Time-based Greetings and Day/Night Theme Auto-sense with Mobile Viewport Sensing
   useEffect(() => {
     const updateGreeting = () => {
       const hour = new Date().getHours();
@@ -120,7 +121,18 @@ export const Desktop: React.FC = () => {
       setTheme("dark");
       document.documentElement.setAttribute("data-theme", "dark");
     };
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
     updateGreeting();
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   // Status rotation loop
@@ -601,12 +613,19 @@ export const Desktop: React.FC = () => {
         {desktopIcons.map((ico, idx) => (
           <motion.div
             key={ico.id}
-            drag
+            drag={!isMobile}
             dragMomentum={false}
-            initial={{ x: 24, y: 120 + idx * 80 }}
+            initial={isMobile ? { x: 12 + (idx % 3) * 100, y: 80 + Math.floor(idx / 3) * 90 } : { x: 24, y: 120 + idx * 80 }}
             className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 group"
             onDoubleClick={() => openWindow(ico.id)}
-            onClick={() => playClickSound(0.25)}
+            onClick={() => {
+              if (isMobile) {
+                // Single tap opens window on mobile touch screens
+                openWindow(ico.id);
+              } else {
+                playClickSound(0.25);
+              }
+            }}
             title="Double click to open, drag to move"
           >
             <Magnetic>
@@ -625,12 +644,18 @@ export const Desktop: React.FC = () => {
         {/* Draggable Hidden Mystery Box folder */}
         {showHiddenFolder && (
           <motion.div
-            drag
+            drag={!isMobile}
             dragMomentum={false}
-            initial={{ x: 24, y: 120 + desktopIcons.length * 80 }}
+            initial={isMobile ? { x: 12 + (desktopIcons.length % 3) * 100, y: 80 + Math.floor(desktopIcons.length / 3) * 90 } : { x: 24, y: 120 + desktopIcons.length * 80 }}
             className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 animate-pulse"
             onDoubleClick={() => openWindow("secret")}
-            onClick={() => playClickSound(0.3)}
+            onClick={() => {
+              if (isMobile) {
+                openWindow("secret");
+              } else {
+                playClickSound(0.3);
+              }
+            }}
             title="Double click to decrypt, drag to move"
           >
             <Magnetic>
@@ -651,10 +676,11 @@ export const Desktop: React.FC = () => {
       <AnimatePresence>
         {showSidebar && (
           <motion.div
-            drag
+            drag={!isMobile}
             dragMomentum={false}
-            initial={{ x: 860, y: 120 }} // Positioned elegantly on the right by default
-            className="absolute w-44 bg-[#111118]/90 border border-white/10 backdrop-blur-xl p-3 rounded-xl z-[99] select-none pointer-events-auto flex flex-col space-y-3 shadow-2xl"
+            initial={isMobile ? { x: 16, y: 310 } : { x: 860, y: 120 }}
+            animate={isMobile ? { x: 16, y: 310 } : {}}
+            className="absolute w-[calc(100vw-32px)] md:w-44 bg-[#111118]/90 border border-white/10 backdrop-blur-xl p-3 rounded-xl z-[99] select-none pointer-events-auto flex flex-col space-y-3 shadow-2xl"
             style={{
               boxShadow: "0 15px 40px rgba(0,0,0,0.6)",
               borderColor: "var(--border)"

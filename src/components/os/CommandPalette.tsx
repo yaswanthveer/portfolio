@@ -73,7 +73,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black/60 backdrop-blur-md z-[99999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 w-full h-full bg-black/60 backdrop-blur-md z-[99999] flex items-start md:items-center justify-center p-4 pt-[15vh] md:pt-4">
       {/* Click outside to close */}
       <div className="absolute inset-0 w-full h-full" onClick={onClose} />
 

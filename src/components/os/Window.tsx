@@ -174,30 +174,36 @@ export const Window: React.FC<WindowProps> = ({
               e.stopPropagation();
               handleAction(onClose);
             }}
-            className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] hover:brightness-75 transition flex items-center justify-center group"
+            className="w-6 h-6 -mx-1.5 flex items-center justify-center outline-none select-none group relative pointer-events-auto"
             title="Close"
           >
-            <X className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E] group-hover:brightness-75 transition flex items-center justify-center">
+              <X className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            </div>
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleAction(onMinimize);
             }}
-            className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] hover:brightness-75 transition flex items-center justify-center group"
+            className="w-6 h-6 -mx-1.5 flex items-center justify-center outline-none select-none group relative pointer-events-auto"
             title="Minimize"
           >
-            <Minimize2 className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123] group-hover:brightness-75 transition flex items-center justify-center">
+              <Minimize2 className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            </div>
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleAction(onMaximize);
             }}
-            className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] hover:brightness-75 transition flex items-center justify-center group"
+            className="w-6 h-6 -mx-1.5 flex items-center justify-center outline-none select-none group relative pointer-events-auto"
             title="Maximize"
           >
-            <Square className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29] group-hover:brightness-75 transition flex items-center justify-center">
+              <Square className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black font-extrabold" />
+            </div>
           </button>
         </div>
 

@@ -252,6 +252,10 @@ body::after {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   box-shadow: 0 -4px 20px -5px var(--shadow-color);
   transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+  
+  /* iPhone Home Indicator Safe Area compliance */
+  height: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
 }
 
 .taskbar-btn {

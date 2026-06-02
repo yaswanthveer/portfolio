@@ -49,14 +49,14 @@ export const AIOrb: React.FC<AIOrbProps> = ({ onOpenWindow }) => {
   };
 
   return (
-    <div className="fixed bottom-16 right-4 z-[99999] select-none font-mono">
+    <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] right-4 z-[99999] select-none font-mono">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ scale: 0.8, opacity: 0, y: 30 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 30 }}
-            className="absolute bottom-16 right-0 w-80 bg-[#0F0F15]/95 border border-[#00D4FF]/30 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4"
+            className="absolute bottom-16 right-0 w-[calc(100vw-32px)] sm:w-80 bg-[#0F0F15]/95 border border-[#00D4FF]/30 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4"
             style={{
               boxShadow: "0 10px 40px rgba(0, 212, 255, 0.15)",
             }}
