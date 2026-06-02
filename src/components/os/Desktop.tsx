@@ -127,6 +127,10 @@ export const Desktop: React.FC = () => {
       setIsMobile(mobile);
       if (mobile) {
         setShowSidebar(false);
+        setFocusedWindowId(null);
+        setWindows(prev =>
+          prev.map(w => ({ ...w, isOpen: false }))
+        );
       }
     };
 

@@ -491,6 +491,14 @@ html {
     display: flex !important;
   }
 
+  /* PERFORMANCE FIX: Strip blurs and glows from taskbar as well */
+  .taskbar {
+    background: #0D0D12 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
+  }
+
   /* PERFORMANCE FIX: Remove heavy background content blurs */
   .window-content {
     background: #0D0D12 !important; /* Solid background */
