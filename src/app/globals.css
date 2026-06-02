@@ -437,7 +437,7 @@ html {
   animation: iconBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* Premium Native-Style iOS/Mobile Responsive Layout Overrides */
+/* Premium Native-Style iOS/Mobile Responsive Layout & Performance Overrides */
 @media (max-width: 767px) {
   /* 1. Desktop Icons layout (Instant CSS Grid) */
   .desktop-icons-container {
@@ -476,8 +476,14 @@ html {
     max-height: none !important;
     margin-bottom: 0 !important;
     z-index: 50 !important;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
-    animation: windowSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important; /* solid, clean shadow */
+    animation: windowSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+
+    /* PERFORMANCE FIX: Eliminate heavy real-time blurs and backdrop-filters */
+    background: #0D0D12 !important; /* Solid high-contrast background */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
   }
 
   /* Only render the currently active focused window card */
@@ -485,24 +491,65 @@ html {
     display: flex !important;
   }
 
+  /* PERFORMANCE FIX: Remove heavy background content blurs */
+  .window-content {
+    background: #0D0D12 !important; /* Solid background */
+    color: #F0F0FF !important;
+    text-shadow: none !important; /* Clear glow filters */
+  }
+
+  /* Enforce solid contrast border on focused state rather than heavy glow shadows */
+  .window-glow-active {
+    box-shadow: none !important;
+    border: 1.5px solid var(--active-glow-color, var(--neon-cyan)) !important;
+  }
+
+  /* PERFORMANCE FIX: Strip dynamic heavy blend modes and glows on typography */
+  .glitch-hover:hover {
+    animation: none !important;
+    text-shadow: none !important;
+  }
+
+  /* PERFORMANCE FIX: Disable browser layers that trigger costly GPU compositing */
+  .noise-overlay,
+  .scanlines {
+    display: none !important;
+  }
+
   /* Slide-up anim for premium card opening */
   @keyframes windowSlideUp {
     from {
       opacity: 0;
-      transform: translateY(20px) scale(0.97) !important;
+      transform: translateY(20px) !important;
     }
     to {
       opacity: 1;
-      transform: translateY(0) scale(1) !important;
+      transform: translateY(0) !important;
     }
   }
 
-  /* Reduce opacity of background elements on mobile to prevent any busy layout overlapping */
-  .floating-title,
-  .floating-title + h2,
-  .floating-title + h2 + p,
-  .floating-title + h2 + p + p {
-    opacity: 0.025 !important;
+  /* Text opacity lock - never let text fade or wash out */
+  .window-content p,
+  .window-content span,
+  .window-content li {
+    opacity: 1 !important;
+    color: #F0F0FF !important;
+  }
+
+  /* Fix for light theme on mobile - ensure high contrast text */
+  [data-theme='light'] .window {
+    background: #FFFDF8 !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  }
+  [data-theme='light'] .window-content {
+    background: #FFFDF8 !important;
+    color: #1A1510 !important;
+  }
+  [data-theme='light'] .window-content p,
+  [data-theme='light'] .window-content span,
+  [data-theme='light'] .window-content li {
+    opacity: 1 !important;
+    color: #1A1510 !important;
   }
 }
 

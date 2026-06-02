@@ -116,14 +116,14 @@ export const Window: React.FC<WindowProps> = ({
       onDragEnd={() => {
         lastPosition.current = { x: x.get(), y: y.get() };
       }}
-      initial={isMobile ? { scale: 0.95, opacity: 0 } : { x: initialX, y: initialY, scale: 0.8, opacity: 0, filter: "blur(20px)" }}
+      initial={isMobile ? { opacity: 0 } : { x: initialX, y: initialY, scale: 0.8, opacity: 0, filter: "blur(20px)" }}
       animate={
         isMinimized
           ? { scale: 0.8, opacity: 0, pointerEvents: "none" }
           : isMaximized
           ? { width: "100%", height: "calc(100vh - 52px)", scale: 1, opacity: 1, zIndex: isFocused ? 50 : 30 }
           : isMobile
-          ? { width: "100%", height: "auto", scale: 1, opacity: 1, zIndex: isFocused ? 50 : 30 }
+          ? { opacity: isFocused ? 1 : 0, pointerEvents: isFocused ? "auto" : "none", zIndex: isFocused ? 50 : 30 }
           : {
               width: windowSize.width,
               height: windowSize.height,

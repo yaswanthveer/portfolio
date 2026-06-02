@@ -275,7 +275,8 @@ export const Desktop: React.FC = () => {
 
     let animFrame: number;
     let particles: { x: number; y: number; vx: number; vy: number; radius: number }[] = [];
-    const maxParticles = 22;
+    const isMobileDevice = window.innerWidth < 768;
+    const maxParticles = isMobileDevice ? 6 : 22;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -342,26 +343,28 @@ export const Desktop: React.FC = () => {
         ctx.fill();
       });
 
-      // Draw connection vectors
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      // Draw connection vectors (Desktop only to prevent real-time math overhead on mobile Safari)
+      if (!isMobileDevice) {
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = lineColor;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = lineColor;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       }
 
-      // Draw vector lines to cursor coordinate
-      if (mousePos.x !== -1000) {
+      // Draw vector lines to cursor coordinate (Desktop only to bypass coordinate listeners on mobile)
+      if (!isMobileDevice && mousePos.x !== -1000) {
         particles.forEach((p) => {
           const dx = p.x - mousePos.x;
           const dy = p.y - mousePos.y;
@@ -596,32 +599,86 @@ export const Desktop: React.FC = () => {
 
       {/* Hero Watermark Text (Slow Floating title in backdrop) */}
       <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none z-0 select-none p-6 text-center max-w-4xl mx-auto space-y-4">
-        <div
-          className="unbounded font-extrabold text-5xl md:text-7xl tracking-widest uppercase mb-1 floating-title"
-          style={{ color: "rgba(0, 212, 255, 0.03)" }}
-        >
-          STARBOY
-        </div>
-        <h2
-          className="unbounded font-extrabold text-base md:text-lg uppercase tracking-wider leading-relaxed"
-          style={{ color: "rgba(255, 255, 255, 0.04)" }}
-        >
-          Hey! My name is Veer, a 22-year-old designer born in Palamaner and now based in Andhra. Always chasing the experimental, a Starboy in orbit.
-        </h2>
-        <p
-          className="font-mono text-[10px] md:text-xs uppercase tracking-widest leading-relaxed font-bold max-w-xl"
-          style={{ color: "rgba(255, 0, 128, 0.05)" }}
-        >
-          I build visuals that feel like fever dreams: sharp, unstable, never still.
-        </p>
-        <p
-          className="font-mono text-[9px] md:text-[10px] uppercase tracking-wider leading-relaxed font-medium max-w-lg"
-          style={{ color: "rgba(255, 255, 255, 0.03)" }}
-        >
-          Quiet in life, chaotic in creation.
-          <br />
-          Not clean. Not safe. Always alive.
-        </p>
+        {isMobile ? (
+          !windows.some(w => w.isOpen && !w.isMinimized) && (
+            /* Premium Mobile-First High-Contrast Landing Page */
+            <div className="pointer-events-auto flex flex-col items-center justify-center space-y-5 px-4 pt-16 pb-6 max-w-md w-full select-text animate-fade-in">
+              {/* Profile pic holder */}
+              <div className="w-24 h-24 rounded-full border-2 border-[#00FF88] overflow-hidden bg-black shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/veer.jpg"
+                  alt="Yaswanth Veer"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <h1 className="unbounded font-extrabold text-2xl text-white uppercase tracking-wider">
+                  Yaswanth Veer
+                </h1>
+                <span className="inline-block px-2.5 py-0.5 bg-[#00D4FF]/10 text-[#00D4FF] border border-[#00D4FF]/30 text-[9px] font-mono tracking-widest uppercase font-bold">
+                  SWE × AI-ML × UI/UX
+                </span>
+              </div>
+
+              <p className="text-white text-xs leading-relaxed max-w-xs font-mono font-medium">
+                I build high-performance AI engines and beautiful, tactile user interfaces from Bengaluru, India.
+              </p>
+
+              {/* Quick CTAs for Mobile Viewport */}
+              <div className="flex flex-col space-y-2.5 w-full pt-2">
+                <button
+                  onClick={() => openWindow("projects")}
+                  className="w-full py-2.5 bg-gradient-to-r from-[#00D4FF] to-[#00FF88] text-black font-extrabold text-xs tracking-widest uppercase rounded-lg shadow-md active:scale-95 transition"
+                >
+                  📂 View Project Files
+                </button>
+                <button
+                  onClick={() => openWindow("contact")}
+                  className="w-full py-2.5 bg-white/5 border border-white/20 hover:border-white/30 text-white font-extrabold text-xs tracking-widest uppercase rounded-lg active:scale-95 transition"
+                >
+                  ✉️ Hire Mode (CONTACT.sh)
+                </button>
+                <button
+                  onClick={() => openWindow("chatbot")}
+                  className="w-full py-2.5 bg-[#FF0080]/15 border border-[#FF0080]/30 text-[#FF0080] font-extrabold text-xs tracking-widest uppercase rounded-lg active:scale-95 transition"
+                >
+                  🤖 Query YASWANTH.AI
+                </button>
+              </div>
+            </div>
+          )
+        ) : (
+          <>
+            <div
+              className="unbounded font-extrabold text-5xl md:text-7xl tracking-widest uppercase mb-1 floating-title"
+              style={{ color: "rgba(0, 212, 255, 0.03)" }}
+            >
+              STARBOY
+            </div>
+            <h2
+              className="unbounded font-extrabold text-base md:text-lg uppercase tracking-wider leading-relaxed"
+              style={{ color: "rgba(255, 255, 255, 0.04)" }}
+            >
+              Hey! My name is Veer, a 22-year-old designer born in Palamaner and now based in Andhra. Always chasing the experimental, a Starboy in orbit.
+            </h2>
+            <p
+              className="font-mono text-[10px] md:text-xs uppercase tracking-widest leading-relaxed font-bold max-w-xl"
+              style={{ color: "rgba(255, 0, 128, 0.05)" }}
+            >
+              I build visuals that feel like fever dreams: sharp, unstable, never still.
+            </p>
+            <p
+              className="font-mono text-[9px] md:text-[10px] uppercase tracking-wider leading-relaxed font-medium max-w-lg"
+              style={{ color: "rgba(255, 255, 255, 0.03)" }}
+            >
+              Quiet in life, chaotic in creation.
+              <br />
+              Not clean. Not safe. Always alive.
+            </p>
+          </>
+        )}
       </div>
 
       {/* Draggable Desktop Icons (Placed directly on wallpaper, movable anywhere!) */}
