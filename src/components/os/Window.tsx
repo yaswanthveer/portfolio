@@ -148,7 +148,7 @@ export const Window: React.FC<WindowProps> = ({
       whileHover={!isMobile && !isMaximized ? { scale: 1.002 } : {}}
       onClick={handleWindowClick}
       className={`window absolute flex flex-col transition-shadow duration-300 pointer-events-auto ${
-        isFocused ? "window-glow-active" : ""
+        isFocused ? "window-glow-active window-focused" : ""
       } ${isMobile ? "relative !top-0 !left-0 mb-4" : ""}`}
       style={{
         x,

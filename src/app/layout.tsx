@@ -1,7 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { XPSystemProvider } from "@/components/effects/XPSystem";
 import { CustomCursor } from "@/components/effects/CustomCursor";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "CHAOS.EXE v8.77 | Kandukuri Yaswanth Veer — UI/UX × AI Engineer",
@@ -33,6 +41,7 @@ export const metadata: Metadata = {
     description: "Sentient operating system portfolio of a UI/UX × AI Engineer.",
   }
 };
+
 
 export default function RootLayout({
   children,

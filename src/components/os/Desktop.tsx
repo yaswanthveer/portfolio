@@ -123,7 +123,11 @@ export const Desktop: React.FC = () => {
     };
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setShowSidebar(false);
+      }
     };
 
     updateGreeting();
@@ -592,16 +596,28 @@ export const Desktop: React.FC = () => {
 
       {/* Hero Watermark Text (Slow Floating title in backdrop) */}
       <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none z-0 select-none p-6 text-center max-w-4xl mx-auto space-y-4">
-        <div className="unbounded font-extrabold text-[#00D4FF]/[0.03] text-5xl md:text-7xl tracking-widest uppercase mb-1 floating-title">
+        <div
+          className="unbounded font-extrabold text-5xl md:text-7xl tracking-widest uppercase mb-1 floating-title"
+          style={{ color: "rgba(0, 212, 255, 0.03)" }}
+        >
           STARBOY
         </div>
-        <h2 className="unbounded font-extrabold text-base md:text-lg text-white/[0.04] uppercase tracking-wider leading-relaxed">
+        <h2
+          className="unbounded font-extrabold text-base md:text-lg uppercase tracking-wider leading-relaxed"
+          style={{ color: "rgba(255, 255, 255, 0.04)" }}
+        >
           Hey! My name is Veer, a 22-year-old designer born in Palamaner and now based in Andhra. Always chasing the experimental, a Starboy in orbit.
         </h2>
-        <p className="font-mono text-[10px] md:text-xs text-[#FF0080]/[0.05] uppercase tracking-widest leading-relaxed font-bold max-w-xl">
+        <p
+          className="font-mono text-[10px] md:text-xs uppercase tracking-widest leading-relaxed font-bold max-w-xl"
+          style={{ color: "rgba(255, 0, 128, 0.05)" }}
+        >
           I build visuals that feel like fever dreams: sharp, unstable, never still.
         </p>
-        <p className="font-mono text-[9px] md:text-[10px] text-white/[0.03] uppercase tracking-wider leading-relaxed font-medium max-w-lg">
+        <p
+          className="font-mono text-[9px] md:text-[10px] uppercase tracking-wider leading-relaxed font-medium max-w-lg"
+          style={{ color: "rgba(255, 255, 255, 0.03)" }}
+        >
           Quiet in life, chaotic in creation.
           <br />
           Not clean. Not safe. Always alive.
@@ -609,7 +625,7 @@ export const Desktop: React.FC = () => {
       </div>
 
       {/* Draggable Desktop Icons (Placed directly on wallpaper, movable anywhere!) */}
-      <div className="absolute inset-0 pointer-events-none z-10 select-none">
+      <div className="absolute inset-0 pointer-events-none z-10 select-none desktop-icons-container">
         {desktopIcons.map((ico, idx) => (
           <motion.div
             key={ico.id}
@@ -617,7 +633,7 @@ export const Desktop: React.FC = () => {
             dragMomentum={false}
             initial={{ x: 24, y: 120 + idx * 80 }}
             animate={isMobile ? { x: 12 + (idx % 3) * 98, y: 80 + Math.floor(idx / 3) * 90 } : { x: 24, y: 120 + idx * 80 }}
-            className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 group"
+            className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 group desktop-icon-item"
             onDoubleClick={() => openWindow(ico.id)}
             onClick={() => {
               if (isMobile) {
@@ -649,7 +665,7 @@ export const Desktop: React.FC = () => {
             dragMomentum={false}
             initial={{ x: 24, y: 120 + desktopIcons.length * 80 }}
             animate={isMobile ? { x: 12 + (desktopIcons.length % 3) * 98, y: 80 + Math.floor(desktopIcons.length / 3) * 90 } : { x: 24, y: 120 + desktopIcons.length * 80 }}
-            className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 animate-pulse"
+            className="absolute p-2 rounded-lg pointer-events-auto cursor-grab active:cursor-grabbing hover:bg-white/5 border border-transparent hover:border-white/5 active:border-white/10 flex flex-col items-center justify-center text-center w-24 animate-pulse desktop-icon-item"
             onDoubleClick={() => openWindow("secret")}
             onClick={() => {
               if (isMobile) {

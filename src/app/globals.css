@@ -436,3 +436,73 @@ html {
 .icon-bounce-active {
   animation: iconBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
+
+/* Premium Native-Style iOS/Mobile Responsive Layout Overrides */
+@media (max-width: 767px) {
+  /* 1. Desktop Icons layout (Instant CSS Grid) */
+  .desktop-icons-container {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    padding: 80px 16px 16px 16px !important;
+    width: 100% !important;
+    height: auto !important;
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .desktop-icon-item {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    pointer-events: auto !important;
+  }
+
+  /* 2. Apple iOS Card Sheet Window overlay */
+  .window {
+    display: none !important; /* Hide non-focused windows */
+    transform: none !important; /* Disable Framer absolute positioning coordinates */
+    position: fixed !important;
+    top: 16px !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(52px + env(safe-area-inset-bottom, 0px) + 16px) !important; /* Positioned perfectly above bottom taskbar */
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    margin-bottom: 0 !important;
+    z-index: 50 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5) !important;
+    animation: windowSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  /* Only render the currently active focused window card */
+  .window.window-focused {
+    display: flex !important;
+  }
+
+  /* Slide-up anim for premium card opening */
+  @keyframes windowSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.97) !important;
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1) !important;
+    }
+  }
+
+  /* Reduce opacity of background elements on mobile to prevent any busy layout overlapping */
+  .floating-title,
+  .floating-title + h2,
+  .floating-title + h2 + p,
+  .floating-title + h2 + p + p {
+    opacity: 0.025 !important;
+  }
+}
+
