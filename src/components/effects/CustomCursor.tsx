@@ -17,7 +17,20 @@ export const CustomCursor: React.FC = () => {
   const trailY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Hide native cursor
+    // Detect touch device to bypass custom cursor and restore standard browser tap behavior
+    const isTouchDevice = 
+      typeof window !== "undefined" && (
+        window.matchMedia("(pointer: coarse)").matches || 
+        "ontouchstart" in window || 
+        navigator.maxTouchPoints > 0
+      );
+
+    if (isTouchDevice) {
+      document.documentElement.classList.remove("custom-cursor-active");
+      return;
+    }
+
+    // Hide native cursor on desktop
     document.documentElement.classList.add("custom-cursor-active");
 
     const moveCursor = (e: MouseEvent) => {

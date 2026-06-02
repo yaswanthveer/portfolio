@@ -788,7 +788,13 @@ export const Desktop: React.FC = () => {
       </AnimatePresence>
 
       {/* Windows Layer */}
-      <div className="absolute inset-0 z-20 pointer-events-none p-4 md:p-8 flex flex-col md:block overflow-y-auto md:overflow-visible">
+      <div 
+        className={`absolute inset-0 z-20 p-4 md:p-8 flex flex-col md:block overflow-y-auto md:overflow-visible ${
+          isMobile && windows.some(w => w.isOpen && !w.isMinimized) 
+            ? "pointer-events-auto" 
+            : "pointer-events-none"
+        }`}
+      >
         <AnimatePresence>
           {windows.map((win) => (
             <Window
