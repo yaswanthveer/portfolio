@@ -1,27 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&family=Unbounded:wght@600;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Colors - Dark Mode ("Void") */
+  --void: #0A0A0F;
+  --surface: #111118;
+  --surface-rgb: 17, 17, 24;
+  --glass: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.08);
+  --window-bg: rgba(17, 17, 24, 0.82);
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  
+  /* Text */
+  --text-primary: #F0F0FF;
+  --text-secondary: rgba(240, 240, 255, 0.55);
+  --text-terminal: #00FF41;
+
+  /* Neon Accents */
+  --neon-green: #00FF88;
+  --neon-cyan: #00D4FF;
+  --neon-magenta: #FF0080;
+  --neon-orange: #FF4E00;
+  --neon-yellow: #FFEB00;
+  
+  /* Project-Specific Glows */
+  --rythu-amber: #C97B2A;
+  --btc-green: #39FF14;
+  --ziro-cyan: #00D4FF;
+  --shecodes-pink: #FF0080;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='light'] {
+  /* Cream Light Mode */
+  --void: #FFF8F0;
+  --surface: #FFFDF8;
+  --surface-rgb: 255, 253, 248;
+  --glass: rgba(0, 0, 0, 0.02);
+  --border: rgba(0, 0, 0, 0.12);
+  --window-bg: rgba(255, 253, 248, 0.9);
+  --shadow-color: rgba(60, 40, 20, 0.15);
+
+  /* Text */
+  --text-primary: #1A1510;
+  --text-secondary: rgba(26, 21, 16, 0.65);
+  --text-terminal: #00882C;
+
+  /* Adjust Neon Accents for contrast */
+  --neon-green: #00A651;
+  --neon-cyan: #0082A3;
+  --neon-magenta: #D9006C;
+  --neon-orange: #C93C00;
+  --neon-yellow: #B8A300;
+  
+  /* Project Specific */
+  --rythu-amber: #A3621E;
+  --btc-green: #25C20C;
+  --ziro-cyan: #0099BA;
+  --shecodes-pink: #D9006C;
+}
+
+/* Universal Light Theme Content Overrides */
+[data-theme='light'] .window-content {
+  color: var(--text-primary) !important;
+}
+
+[data-theme='light'] .window-content .text-white,
+[data-theme='light'] .window-content .text-white\/90,
+[data-theme='light'] .window-content .text-white\/80 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme='light'] .window-content .text-white\/70,
+[data-theme='light'] .window-content .text-white\/60,
+[data-theme='light'] .window-content .text-white\/50,
+[data-theme='light'] .window-content .text-white\/40,
+[data-theme='light'] .window-content .text-white\/30 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme='light'] .window-content .bg-white\/5,
+[data-theme='light'] .window-content .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme='light'] .window-content .border-white\/5,
+[data-theme='light'] .window-content .border-white\/10,
+[data-theme='light'] .window-content .border-white\/15,
+[data-theme='light'] .window-content .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Override hardcoded neon text colors for readability in Light Mode */
+[data-theme='light'] .window-content .text-\[\#00D4FF\] {
+  color: var(--neon-cyan) !important;
+}
+
+[data-theme='light'] .window-content .text-\[\#FF0080\] {
+  color: var(--neon-magenta) !important;
+}
+
+[data-theme='light'] .window-content .text-\[\#00FF88\] {
+  color: var(--neon-green) !important;
+}
+
+[data-theme='light'] .window-content .text-\[\#FFEB00\] {
+  color: var(--neon-yellow) !important;
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--void);
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Ambient Grain & Scanlines Layer */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+[data-theme='light'] .noise-overlay {
+  opacity: 0.015;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9997;
+}
+
+[data-theme='light'] .scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Typography styles */
+.hero-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.title-mono {
+  font-family: 'Fira Code', monospace;
+  font-weight: 500;
+}
+
+.terminal-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  color: var(--text-terminal);
+}
+
+.unbounded {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 800;
+}
+
+/* Window Chrome Glassmorphism */
+.window {
+  background: var(--window-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px -10px var(--shadow-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Active Glow States */
+.window-glow-active {
+  box-shadow: 
+    0 0 0 1px var(--active-glow-color, var(--neon-cyan)),
+    0 0 25px -5px var(--active-glow-color, var(--neon-cyan)),
+    0 20px 60px -10px var(--shadow-color);
+}
+
+/* Dynamic Window Elements Theme Adapters */
+.window-header {
+  background: rgba(var(--surface-rgb), 0.4);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+.window-header-active {
+  background: rgba(var(--surface-rgb), 0.7);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+.window-content {
+  background: rgba(var(--surface-rgb), 0.85);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Frosted Taskbar Utility */
+.taskbar {
+  background: var(--window-bg);
+  border-top: 1px solid var(--border);
+  color: var(--text-primary);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 -4px 20px -5px var(--shadow-color);
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.taskbar-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+[data-theme='light'] .taskbar-btn {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.taskbar-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme='light'] .taskbar-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Global scroll styling inside windows */
+.window-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.window-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.window-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.window-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 3px;
+}
+
+.window-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
+}
+
+/* Glitch Animations */
+@keyframes textGlitch {
+  0% { text-shadow: 2px 0 var(--neon-magenta), -2px 0 var(--neon-cyan); }
+  25% { text-shadow: -2px 0 var(--neon-magenta), 2px 0 var(--neon-cyan); }
+  50% { text-shadow: 1px 0 var(--neon-green), -1px 0 var(--neon-yellow); }
+  75% { text-shadow: -1px 0 var(--neon-orange), 1px 0 var(--neon-magenta); }
+  100% { text-shadow: 0 0 transparent; }
+}
+
+.glitch-hover:hover {
+  animation: textGlitch 0.2s steps(2) infinite;
+}
+
+/* Keyframes for OS BSOD crash */
+@keyframes screenFlicker {
+  0% { opacity: 0.95; }
+  50% { opacity: 1; }
+  100% { opacity: 0.98; }
+}
+
+.crashed-screen {
+  animation: screenFlicker 0.15s infinite;
+}
+
+/* Neural drifting nodes styling */
+.neural-node {
+  transition: all 4s ease-in-out;
+}
+
+/* Floating animation for desktop title */
+.floating-title {
+  animation: floatTitle 6s ease-in-out infinite;
+}
+
+@keyframes floatTitle {
+  0% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(-1deg); }
+}
+
+/* Springy active custom scrollbar support */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide default cursor globally when Custom Cursor is loaded */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+/* Founder Mode: Send Gold theme colors globally across the document */
+[data-theme='gold'] {
+  --void: #0D0C07;
+  --surface: #1C190F;
+  --surface-rgb: 28, 25, 15;
+  --glass: rgba(212, 175, 55, 0.04);
+  --border: rgba(212, 175, 55, 0.18);
+  --window-bg: rgba(28, 25, 15, 0.88);
+  --shadow-color: rgba(0, 0, 0, 0.85);
+
+  --text-primary: #FFF9E6;
+  --text-secondary: rgba(255, 249, 230, 0.6);
+  --text-terminal: #D4AF37;
+
+  --neon-green: #D4AF37; /* Gold */
+  --neon-cyan: #FFD700;  /* Pure Gold */
+  --neon-magenta: #F0C420;
+  --neon-orange: #C5A018;
+  --neon-yellow: #E6C33B;
+  
+  --rythu-amber: #D4AF37;
+  --btc-green: #FFD700;
+  --ziro-cyan: #F0C420;
+  --shecodes-pink: #E6C33B;
+}
+
+/* Gold active glowing state override */
+[data-theme='gold'] .window-glow-active {
+  box-shadow: 
+    0 0 0 1px #D4AF37,
+    0 0 25px -5px #FFD700,
+    0 20px 60px -10px var(--shadow-color);
+}
+
+/* 3D Project Card & Sweeping reflection utilities */
+.project-card-container {
+  perspective: 1000px;
+}
+
+.project-card-3d {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+}
+
+.project-card-3d:hover {
+  box-shadow: 
+    0 0 0 1px var(--hover-accent),
+    0 0 25px -5px var(--hover-accent);
+}
+
+.reflection-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 48%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.12) 52%,
+    transparent 60%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.project-card-container:hover .reflection-sweep {
+  transform: translateX(100%);
+}
+
+/* Animated bouncy click animation keyframe for desktop folders */
+@keyframes iconBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.85); }
+  50% { transform: scale(1.18); }
+  75% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.icon-bounce-active {
+  animation: iconBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
